@@ -1,128 +1,61 @@
-const Post = require('../models/Post');
+const PostService = require('../services/postService');
 
 // Get all posts for a user
-exports.getPosts = async (req, res) => {
+exports.getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({ user: req.user.id }).sort({ createdAt: -1 });
+    const posts = await PostService.getPosts(req.user.id);
     res.json(posts);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    next(err);
   }
 };
 
 // Get all public posts
-exports.getAllPosts = async (req, res) => {
+exports.getAllPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find()
-      .sort({ createdAt: -1 })
-      .populate('user', ['name', 'email']);
-    
+    const posts = await PostService.getAllPosts();
     res.json(posts);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    next(err);
   }
 };
 
 // Create a post
-exports.createPost = async (req, res) => {
+exports.createPost = async (req, res, next) => {
   try {
-    const { title, content, platform, image, scheduledDate } = req.body;
-
-    const newPost = new Post({
-      user: req.user.id,
-      title,
-      content,
-      platform,
-      image,
-      scheduledDate: scheduledDate ? new Date(scheduledDate) : null,
-      status: scheduledDate ? 'scheduled' : 'published'
-    });
-
-    const post = await newPost.save();
+    const post = await PostService.createPost(req.user.id, req.body);
     res.json(post);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    next(err);
   }
 };
 
 // Get a post by ID
-exports.getPostById = async (req, res) => {
+exports.getPostById = async (req, res, next) => {
   try {
-    const post = await Post.findById(req.params.id).populate('user', ['name', 'email']);
-    
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-
+    const post = await PostService.getPostById(req.params.id);
     res.json(post);
   } catch (err) {
-    console.error(err.message);
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-    res.status(500).send('Server error');
+    next(err);
   }
 };
 
 // Update a post
-exports.updatePost = async (req, res) => {
+exports.updatePost = async (req, res, next) => {
   try {
-    const { title, content, platform, image, scheduledDate, status } = req.body;
-
-    let post = await Post.findById(req.params.id);
-    
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-
-    // Check if the post belongs to the user
-    if (post.user.toString() !== req.user.id) {
-      return res.status(401).json({ message: 'User not authorized' });
-    }
-
-    // Update fields
-    post.title = title || post.title;
-    post.content = content || post.content;
-    post.platform = platform || post.platform;
-    post.image = image !== undefined ? image : post.image;
-    post.scheduledDate = scheduledDate ? new Date(scheduledDate) : post.scheduledDate;
-    post.status = status || post.status;
-
-    await post.save();
+    const post = await PostService.updatePost(req.params.id, req.user.id, req.body);
     res.json(post);
   } catch (err) {
-    console.error(err.message);
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-    res.status(500).send('Server error');
+    next(err);
   }
 };
 
 // Delete a post
-exports.deletePost = async (req, res) => {
+exports.deletePost = async (req, res, next) => {
   try {
-    const post = await Post.findById(req.params.id);
-    
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-
-    // Check if the post belongs to the user
-    if (post.user.toString() !== req.user.id) {
-      return res.status(401).json({ message: 'User not authorized' });
-    }
-
-    await Post.deleteOne({ _id: req.params.id });
-    res.json({ message: 'Post removed' });
+    const result = await PostService.deletePost(req.params.id, req.user.id);
+    res.json(result);
   } catch (err) {
-    console.error(err.message);
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-    res.status(500).send('Server error');
+    next(err);
   }
 }; 

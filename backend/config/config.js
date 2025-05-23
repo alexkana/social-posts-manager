@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
+const variables = require('./variables');
 
 module.exports = { 
     connectToDB: () => {
-        mongoose.connect(process.env.MONGODB_URI, clientOptions)
+        mongoose.connect(variables.MONGODB_URI, clientOptions)
         .then(() => console.log('MongoDB Connected'))
         .catch(err => {
             console.log('MongoDB Connection Error:', err);

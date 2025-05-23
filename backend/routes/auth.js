@@ -2,16 +2,19 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const auth = require('../middleware/auth');
+const { registerValidation, loginValidation } = require('../validators/authValidators');
+const { validate } = require('../middleware/validation');
+const { loginLimiter, registerLimiter } = require('../middleware/rateLimiter');
 
 // @route   POST /api/auth/register
 // @desc    Register a user
 // @access  Public
-router.post('/register', authController.register);
+router.post('/register', registerLimiter, registerValidation, validate, authController.register);
 
 // @route   POST /api/auth/login
 // @desc    Authenticate user & get token
 // @access  Public
-router.post('/login', authController.login);
+router.post('/login', loginLimiter, loginValidation, validate, authController.login);
 
 // @route   GET /api/auth/me
 // @desc    Get current user

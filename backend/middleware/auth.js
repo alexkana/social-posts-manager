@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const variables = require('../config/variables');
 
 module.exports = function(req, res, next) {
   // Get token from cookie instead of header
@@ -11,7 +12,7 @@ module.exports = function(req, res, next) {
 
   // Verify token
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, variables.JWT_SECRET);
     req.user = decoded.user;
     next();
   } catch (err) {

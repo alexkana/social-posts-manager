@@ -133,11 +133,22 @@ Reusable custom hooks encapsulate complex logic and state management:
 - `useLikes` - Handles post liking functionality
 - `useAuth` - Manages authentication state
 
-### Backend MVC Architecture
-The backend follows the Model-View-Controller (MVC) pattern:
-- **Models**: Define database schemas and business logic
-- **Controllers**: Handle request processing and response formatting
-- **Routes**: Define API endpoints and connect them to controllers
+### Backend Layered Architecture
+The backend follows a clean, layered architecture with clear separation of concerns:
+- **Controllers**: Handle HTTP requests/responses and delegate to services
+- **Services**: Implement business logic and orchestrate operations
+- **Repositories**: Provide data access abstraction and database operations
+- **Validators**: Ensure input validation and data integrity
+- **Middleware**: Process requests with modular, reusable components
+- **Models**: Define database schemas and structure
+
+This architecture improves maintainability, testability, and scalability by decoupling components and following single responsibility principles.
+
+### API Rate Limiting
+The application implements rate limiting to protect against abuse and brute force attacks:
+- Login endpoints are limited to 5 attempts per IP address in a 15-minute window
+- Registration is limited to 3 attempts per hour per IP address
+- Rate limiting provides security benefits while maintaining a good user experience for legitimate users
 
 ### Type Safety with TypeScript
 TypeScript provides type safety throughout the application, reducing runtime errors and improving developer experience through better tooling and autocompletion.

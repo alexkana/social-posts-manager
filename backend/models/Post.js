@@ -22,10 +22,5 @@ const PostSchema = new mongoose.Schema({
   },
 }); 
 
-// Update the updatedAt field on save
-/*PostSchema.pre('save', function(next) {
-  this.updatedAt = Date.now();
-  next();
-}); */
 
 module.exports = mongoose.model('Post', PostSchema);
