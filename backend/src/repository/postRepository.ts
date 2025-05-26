@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
-import type { IPost, IPostRepository } from '../types/index';
-import Post from '../models/Post';
+import mongoose from "mongoose";
+
+import type { IPost, IPostRepository } from "../types/index";
+import Post from "../models/Post";
 
 export default class PostRepository implements IPostRepository {
   private postModel: mongoose.Model<IPost>;
@@ -10,7 +11,7 @@ export default class PostRepository implements IPostRepository {
   }
 
   async findById(id: string): Promise<IPost | null> {
-    return this.postModel.findById(id).populate('user', ['name', 'email']);
+    return this.postModel.findById(id).populate("user", ["name", "email"]);
   }
 
   async findByUserId(userId: string): Promise<IPost[]> {
@@ -18,9 +19,10 @@ export default class PostRepository implements IPostRepository {
   }
 
   async findAll(): Promise<IPost[]> {
-    return this.postModel.find()
+    return this.postModel
+      .find()
       .sort({ createdAt: -1 })
-      .populate('user', ['name', 'email']);
+      .populate("user", ["name", "email"]);
   }
 
   async create(postData: Partial<IPost>): Promise<IPost> {
@@ -46,9 +48,9 @@ export default class PostRepository implements IPostRepository {
   async search(query: string): Promise<IPost[]> {
     return this.postModel.find({
       $or: [
-        { title: { $regex: query, $options: 'i' } },
-        { content: { $regex: query, $options: 'i' } }
-      ]
+        { title: { $regex: query, $options: "i" } },
+        { content: { $regex: query, $options: "i" } },
+      ],
     });
   }
 }

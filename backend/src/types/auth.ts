@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 // Custom Request Interface with User
 export interface AuthenticatedRequest extends Request {
@@ -17,8 +17,16 @@ export interface JWTPayload {
 }
 
 // Express handler types for authenticated routes
-export type AuthenticatedHandler = (req: AuthenticatedRequest, res: Response, next: NextFunction) => Promise<void> | void;
-export type StandardHandler = (req: Request, res: Response, next: NextFunction) => Promise<void> | void;
+export type AuthenticatedHandler = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+) => Promise<void> | void;
+export type StandardHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => Promise<void> | void;
 
 // Login/Register request body types
 export interface LoginRequestBody {
@@ -63,4 +71,4 @@ export interface RegisterData {
 export interface LoginCredentials {
   email: string;
   password: string;
-} 
+}

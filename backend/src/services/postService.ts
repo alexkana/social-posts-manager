@@ -1,6 +1,6 @@
-import PostRepository from '../repository/postRepository';
-import { AppError } from '../utils/errorHandler';
-import type { IPost, CreatePostData, UpdatePostData } from '../types/index';
+import PostRepository from "../repository/postRepository";
+import { AppError } from "../utils/errorHandler";
+import type { IPost, CreatePostData, UpdatePostData } from "../types/index";
 
 // Create a singleton instance of the repository
 const postRepository = new PostRepository();
@@ -33,7 +33,10 @@ export const PostService = {
    * @param postData Post data
    * @returns Created post
    */
-  createPost: async (userId: string, postData: CreatePostData): Promise<IPost> => {
+  createPost: async (
+    userId: string,
+    postData: CreatePostData,
+  ): Promise<IPost> => {
     const { title, content } = postData;
 
     return postRepository.create({
@@ -51,7 +54,7 @@ export const PostService = {
   getPostById: async (postId: string): Promise<IPost> => {
     const post = await postRepository.findById(postId);
     if (!post) {
-      throw new AppError('Post not found', 404);
+      throw new AppError("Post not found", 404);
     }
     return post;
   },
@@ -63,15 +66,19 @@ export const PostService = {
    * @param updateData Update data
    * @returns Updated post
    */
-  updatePost: async (postId: string, userId: string, updateData: UpdatePostData): Promise<IPost> => {
+  updatePost: async (
+    postId: string,
+    userId: string,
+    updateData: UpdatePostData,
+  ): Promise<IPost> => {
     const post = await postRepository.findById(postId);
-    
+
     if (!post) {
-      throw new AppError('Post not found', 404);
+      throw new AppError("Post not found", 404);
     }
 
     if (post.user.toString() !== userId) {
-      throw new AppError('User not authorized', 401);
+      throw new AppError("User not authorized", 401);
     }
 
     const { title, content } = updateData;
@@ -79,14 +86,14 @@ export const PostService = {
     // Prepare update data
     const updatedData = {
       ...(title && { title }),
-      ...(content && { content }),   
+      ...(content && { content }),
     };
 
     const updatedPost = await postRepository.update(postId, updatedData);
     if (!updatedPost) {
-      throw new AppError('Failed to update post', 500);
+      throw new AppError("Failed to update post", 500);
     }
-    
+
     return updatedPost;
   },
 
@@ -96,18 +103,21 @@ export const PostService = {
    * @param userId User ID
    * @returns Deletion confirmation
    */
-  deletePost: async (postId: string, userId: string): Promise<{ message: string }> => {
+  deletePost: async (
+    postId: string,
+    userId: string,
+  ): Promise<{ message: string }> => {
     const post = await postRepository.findById(postId);
-    
+
     if (!post) {
-      throw new AppError('Post not found', 404);
+      throw new AppError("Post not found", 404);
     }
 
     if (post.user.toString() !== userId) {
-      throw new AppError('User not authorized', 401);
+      throw new AppError("User not authorized", 401);
     }
 
     await postRepository.delete(postId);
-    return { message: 'Post removed' };
-  }
+    return { message: "Post removed" };
+  },
 };

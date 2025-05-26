@@ -1,7 +1,8 @@
-import { Document } from 'mongoose';
-import { AuthenticatedRequest } from './auth';
-import { IUser } from './user';
-import { IPost } from './post';
+import { Document } from "mongoose";
+
+import { AuthenticatedRequest } from "./auth";
+import { IUser } from "./user";
+import { IPost } from "./post";
 
 // LikedPost Interface
 export interface ILikedPost extends Document {
@@ -43,8 +44,15 @@ export interface ILikeBulk {
 export interface ILikeBusiness {
   isPostLiked(userId: string, postId: string): Promise<boolean>;
   getLikeCount(postId: string): Promise<number>;
-  toggleLike(userId: string, postId: string): Promise<{ liked: boolean; count: number }>;
+  toggleLike(
+    userId: string,
+    postId: string,
+  ): Promise<{ liked: boolean; count: number }>;
 }
 
 // Main repository interface combining all domains
-export interface ILikeRepository extends ILikeCrud, ILikeQuery, ILikeBulk, ILikeBusiness {} 
+export interface ILikeRepository
+  extends ILikeCrud,
+    ILikeQuery,
+    ILikeBulk,
+    ILikeBusiness {}

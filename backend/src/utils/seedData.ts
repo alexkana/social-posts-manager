@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import axios from "axios";
+
 import User from "../models/User";
 import Post from "../models/Post";
 import { connectToDB } from "../config/config";
@@ -35,7 +36,7 @@ connectToDB();
 const fetchPosts = async (): Promise<any[]> => {
   try {
     const response = await axios.get(
-      "https://jsonplaceholder.typicode.com/posts"
+      "https://jsonplaceholder.typicode.com/posts",
     );
     return response.data;
   } catch (err) {
@@ -52,7 +53,7 @@ const seedPosts = async (): Promise<void> => {
 
     if (existingPosts >= 100) {
       console.log(
-        `Database already has ${existingPosts} posts, skipping seeding.`
+        `Database already has ${existingPosts} posts, skipping seeding.`,
       );
       process.exit(0);
     }
@@ -79,7 +80,7 @@ const seedPosts = async (): Promise<void> => {
     await Post.insertMany(postsToSeed);
 
     console.log(
-      `Successfully seeded ${postsToSeed.length} posts to the database`
+      `Successfully seeded ${postsToSeed.length} posts to the database`,
     );
     process.exit(0);
   } catch (err) {

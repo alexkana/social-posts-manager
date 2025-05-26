@@ -1,4 +1,4 @@
-import { config } from '../config/variables';
+import { config } from "../config/variables";
 
 export class AppError extends Error {
   public statusCode: number;
@@ -8,7 +8,7 @@ export class AppError extends Error {
   constructor(message: string, statusCode: number) {
     super(message);
     this.statusCode = statusCode;
-    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+    this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
     this.isOperational = true;
 
     Error.captureStackTrace(this, this.constructor);
@@ -18,17 +18,17 @@ export class AppError extends Error {
 export const errorHandler = (err: any, req: any, res: any, next: any): void => {
   let { statusCode = 500, message } = err;
 
-  if (config.NODE_ENV === 'production') {
+  if (config.NODE_ENV === "production") {
     // Don't leak error details in production
     if (!err.isOperational) {
       statusCode = 500;
-      message = 'Something went wrong';
+      message = "Something went wrong";
     }
   }
 
   res.status(statusCode).json({
-    status: err.status || 'error',
+    status: err.status || "error",
     message,
-    ...(config.NODE_ENV === 'development' && { stack: err.stack }),
+    ...(config.NODE_ENV === "development" && { stack: err.stack }),
   });
-}; 
+};

@@ -1,7 +1,8 @@
-import { Document } from 'mongoose';
-import { Request } from 'express';
-import { AuthenticatedRequest } from './auth';
-import { IUser } from './user';
+import { Document } from "mongoose";
+import { Request } from "express";
+
+import { AuthenticatedRequest } from "./auth";
+import { IUser } from "./user";
 
 // Post Interface - matching original schema exactly
 export interface IPost extends Document {
@@ -79,4 +80,4 @@ export interface UpdatePostData {
   title?: string;
   content?: string;
   isPublic?: boolean;
-} 
+}

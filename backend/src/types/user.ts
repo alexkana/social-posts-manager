@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 
 // User Interface
 export interface IUser extends Document {
@@ -8,7 +8,7 @@ export interface IUser extends Document {
   password: string;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Methods
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
@@ -35,4 +35,4 @@ export interface IUserQuery {
 }
 
 // Main repository interface combining all domains
-export interface IUserRepository extends IUserCrud, IUserAuth, IUserQuery {} 
+export interface IUserRepository extends IUserCrud, IUserAuth, IUserQuery {}

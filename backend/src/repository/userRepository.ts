@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
-import type { IUser, IUserRepository } from '../types/index';
-import User from '../models/User';
+import mongoose from "mongoose";
+
+import type { IUser, IUserRepository } from "../types/index";
+import User from "../models/User";
 
 export default class UserRepository implements IUserRepository {
   private userModel: mongoose.Model<IUser>;
@@ -29,22 +30,25 @@ export default class UserRepository implements IUserRepository {
     await this.userModel.findByIdAndDelete(id);
   }
 
-  async validateCredentials(email: string, password: string): Promise<IUser | null> {
+  async validateCredentials(
+    email: string,
+    password: string,
+  ): Promise<IUser | null> {
     const user = await this.userModel.findOne({ email });
     // Add password validation logic here
     return user;
   }
 
   async findByName(name: string): Promise<IUser[]> {
-    return this.userModel.find({ name: new RegExp(name, 'i') });
+    return this.userModel.find({ name: new RegExp(name, "i") });
   }
 
   async search(query: string): Promise<IUser[]> {
     return this.userModel.find({
       $or: [
-        { name: new RegExp(query, 'i') },
-        { email: new RegExp(query, 'i') }
-      ]
+        { name: new RegExp(query, "i") },
+        { email: new RegExp(query, "i") },
+      ],
     });
   }
 

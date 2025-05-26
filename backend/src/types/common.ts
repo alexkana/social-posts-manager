@@ -31,7 +31,7 @@ export interface PaginationOptions {
   page: number;
   limit: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 export interface PaginatedResponse<T> {
@@ -52,4 +52,4 @@ export interface QueryFilter {
 // Generic sort options
 export interface SortOptions {
   [key: string]: 1 | -1;
-} 
+}

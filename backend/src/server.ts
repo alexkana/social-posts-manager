@@ -1,15 +1,15 @@
-import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import { connectToDB } from './config/config';
-import setupSignalHandlers from './utils/signalHandler';
-import notFound from './middleware/notFound';
-import { errorHandler } from './utils/errorHandler';
-import { config } from './config/variables';
-import authRoutes from './routes/auth';
-import postRoutes from './routes/posts';
-import likeRoutes from './routes/likes';
+import express, { Request, Response, NextFunction } from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
+import { connectToDB } from "./config/config";
+import setupSignalHandlers from "./utils/signalHandler";
+import notFound from "./middleware/notFound";
+import { errorHandler } from "./utils/errorHandler";
+import { config } from "./config/variables";
+import authRoutes from "./routes/auth";
+import postRoutes from "./routes/posts";
+import likeRoutes from "./routes/likes";
 
 const app = express();
 const PORT: number = parseInt(config.PORT as string) || 3001;
@@ -26,7 +26,7 @@ app.use(
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-  })
+  }),
 );
 
 // 👇 if you hit "Response to preflight request doesn't pass..."
@@ -55,11 +55,11 @@ app.use(notFound);
 app.use(errorHandler);
 
 // Only start server if not in test environment
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== "test") {
   const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
-  
+
   // Setup signal handlers
   setupSignalHandlers(server);
 }

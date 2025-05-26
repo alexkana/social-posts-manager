@@ -1,8 +1,9 @@
-import jwt from 'jsonwebtoken';
-import UserRepository from '../repository/userRepository';
-import { AppError } from '../utils/errorHandler';
-import { config } from '../config/variables';
-import type { IUser, RegisterData, LoginCredentials } from '../types/index';
+import jwt from "jsonwebtoken";
+
+import UserRepository from "../repository/userRepository";
+import { AppError } from "../utils/errorHandler";
+import { config } from "../config/variables";
+import type { IUser, RegisterData, LoginCredentials } from "../types/index";
 
 // Create a singleton instance of the repository
 const userRepository = new UserRepository();
@@ -22,14 +23,14 @@ export const AuthService = {
     // Check if user already exists
     const existingUser = await userRepository.findByEmail(email);
     if (existingUser) {
-      throw new AppError('User already exists with this email', 400);
+      throw new AppError("User already exists with this email", 400);
     }
 
     // Create new user
     const user = await userRepository.create({
       name,
       email,
-      password
+      password,
     });
 
     return AuthService.generateToken(user);
@@ -46,13 +47,13 @@ export const AuthService = {
     // Check if user exists
     const user = await userRepository.findByEmail(email);
     if (!user) {
-      throw new AppError('Invalid credentials', 401);
+      throw new AppError("Invalid credentials", 401);
     }
 
     // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      throw new AppError('Invalid credentials', 401);
+      throw new AppError("Invalid credentials", 401);
     }
 
     return AuthService.generateToken(user);
@@ -66,13 +67,13 @@ export const AuthService = {
   getCurrentUser: async (userId: string): Promise<Partial<IUser>> => {
     const user = await userRepository.findById(userId);
     if (!user) {
-      throw new AppError('User not found', 404);
+      throw new AppError("User not found", 404);
     }
-    
+
     // Remove password from the user object
     const userWithoutPassword = { ...user.toObject() };
     delete userWithoutPassword.password;
-    
+
     return userWithoutPassword;
   },
 
@@ -87,22 +88,22 @@ export const AuthService = {
         id: user.id,
         name: user.name,
         email: user.email,
-      }
+      },
     };
 
     return new Promise((resolve, reject) => {
       jwt.sign(
         payload,
         config.JWT_SECRET,
-        { expiresIn: '7d' },
+        { expiresIn: "7d" },
         (err: Error | null, token?: string) => {
           if (err) {
-            reject(new AppError('Token generation failed', 500));
+            reject(new AppError("Token generation failed", 500));
           } else {
             resolve(token!);
           }
-        }
+        },
       );
     });
-  }
+  },
 };

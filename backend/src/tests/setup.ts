@@ -1,11 +1,11 @@
 /// <reference types="jest" />
-import { beforeAll, afterEach, afterAll } from '@jest/globals';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import mongoose from 'mongoose';
+import { beforeAll, afterEach, afterAll } from "@jest/globals";
+import { MongoMemoryServer } from "mongodb-memory-server";
+import mongoose from "mongoose";
 
 // Set up test environment variables
-process.env.NODE_ENV = 'test';
-process.env.JWT_SECRET = 'test_jwt_secret_key_for_testing';
+process.env.NODE_ENV = "test";
+process.env.JWT_SECRET = "test_jwt_secret_key_for_testing";
 
 let mongoServer: MongoMemoryServer;
 
@@ -17,14 +17,14 @@ beforeAll(async () => {
 
   mongoServer = await MongoMemoryServer.create();
   const mongoUri = mongoServer.getUri();
-  
+
   await mongoose.connect(mongoUri);
 });
 
 afterEach(async () => {
   // Clear all test data after each test
   const collections = mongoose.connection.collections;
-  
+
   for (const key in collections) {
     const collection = collections[key];
     await collection.deleteMany({});
@@ -34,4 +34,4 @@ afterEach(async () => {
 afterAll(async () => {
   await mongoose.disconnect();
   await mongoServer.stop();
-}); 
+});

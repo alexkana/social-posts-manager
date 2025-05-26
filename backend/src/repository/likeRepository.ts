@@ -1,6 +1,7 @@
-import type { Model } from 'mongoose';
-import type { ILikedPost, ILikeRepository } from '../types';
-import LikedPost from '../models/LikedPosts';
+import type { Model } from "mongoose";
+
+import type { ILikedPost, ILikeRepository } from "../types";
+import LikedPost from "../models/LikedPosts";
 
 class LikeRepository implements ILikeRepository {
   private likedPostModel: Model<ILikedPost>;
@@ -10,7 +11,10 @@ class LikeRepository implements ILikeRepository {
   }
 
   async findByUserId(userId: string): Promise<ILikedPost[]> {
-    return this.likedPostModel.find({ user: userId }).populate('post').sort({ createdAt: -1 });
+    return this.likedPostModel
+      .find({ user: userId })
+      .populate("post")
+      .sort({ createdAt: -1 });
   }
 
   async findByPostId(postId: string): Promise<ILikedPost[]> {
@@ -24,15 +28,15 @@ class LikeRepository implements ILikeRepository {
   async delete(id: string): Promise<void> {
     await this.likedPostModel.findByIdAndDelete(id);
   }
-  
+
   async findOne(query: any): Promise<ILikedPost | null> {
     return this.likedPostModel.findOne(query);
   }
-  
+
   async deleteOne(query: any): Promise<void> {
     await this.likedPostModel.deleteOne(query);
   }
-  
+
   async deleteMany(query: any): Promise<{ deletedCount?: number }> {
     return this.likedPostModel.deleteMany(query);
   }
@@ -41,13 +45,18 @@ class LikeRepository implements ILikeRepository {
     return this.likedPostModel.countDocuments(filter);
   }
 
-  async bulkCreate(likeDataArray: Partial<ILikedPost>[]): Promise<ILikedPost[]> {
+  async bulkCreate(
+    likeDataArray: Partial<ILikedPost>[],
+  ): Promise<ILikedPost[]> {
     const result = await this.likedPostModel.insertMany(likeDataArray);
     return result as ILikedPost[];
   }
 
   async isPostLiked(userId: string, postId: string): Promise<boolean> {
-    const like = await this.likedPostModel.findOne({ user: userId, post: postId });
+    const like = await this.likedPostModel.findOne({
+      user: userId,
+      post: postId,
+    });
     return !!like;
   }
 
@@ -55,9 +64,15 @@ class LikeRepository implements ILikeRepository {
     return this.likedPostModel.countDocuments({ post: postId });
   }
 
-  async toggleLike(userId: string, postId: string): Promise<{ liked: boolean; count: number }> {
-    const existingLike = await this.likedPostModel.findOne({ user: userId, post: postId });
-    
+  async toggleLike(
+    userId: string,
+    postId: string,
+  ): Promise<{ liked: boolean; count: number }> {
+    const existingLike = await this.likedPostModel.findOne({
+      user: userId,
+      post: postId,
+    });
+
     if (existingLike) {
       await this.likedPostModel.deleteOne({ user: userId, post: postId });
       const count = await this.getLikeCount(postId);
