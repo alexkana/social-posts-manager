@@ -17,7 +17,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   console.log(post)
   
   const isLiked = user ? isPostLiked(post._id) : false;
-  const userName = typeof post.user === 'object' ? 'sadds' : 'Unknown User';
+  const userName = typeof post.user === 'object' ? user.name : 'Unknown User';
   
   const handleLikeToggle = async () => {
     try {

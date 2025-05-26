@@ -20,8 +20,10 @@ const api = axios.create({
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Authentication error, redirect to login
-      window.location.href = '/login';
+      if (!error.config.url.includes('/auth/login') && !error.config.url.includes('/auth/register')) {
+        // Authentication error, redirect to login
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
