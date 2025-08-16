@@ -1,10 +1,8 @@
 # Social Posts Manager
 
-A comprehensive social media management platform for creating, scheduling, and managing posts across multiple platforms.
-
 ## Project Overview
 
-The Social Posts Manager is a full-stack application designed to help users manage their social media content. It allows users to create, view, like, and manage posts with a clean and intuitive interface.
+The Social Posts Manager is a full-stack application designed to help users manage their social media posts. It allows users to create, view, like, and manage posts with a clean and intuitive interface.
 
 ## Features
 
