@@ -24,7 +24,6 @@ export interface IUserCrud {
 // Authentication-related operations
 export interface IUserAuth {
   findByEmail(email: string): Promise<IUser | null>;
-  validateCredentials(email: string, password: string): Promise<IUser | null>;
 }
 
 // Search and query operations

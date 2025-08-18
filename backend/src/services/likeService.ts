@@ -1,4 +1,4 @@
-import Post from "../models/Post";
+import Post from "@/models/Post";
 import LikeRepository from "../repository/likeRepository";
 import PostRepository from "../repository/postRepository";
 import { AppError } from "../utils/errorHandler";
@@ -13,6 +13,7 @@ export const likePost = async (
   postId: string,
 ): Promise<ServiceResponse> => {
   const post = await postRepository.findById(postId);
+  console.log("Post", post);
 
   if (!post) {
     throw new AppError("Post not found", 404);
@@ -30,7 +31,7 @@ export const likePost = async (
   // Create a new like entry
   await likeRepository.create({
     user: userId,
-    post: postId,
+    post,
   });
 
   return { success: true };
@@ -63,7 +64,14 @@ export const unlikePost = async (
 
 export const getLikedPosts = async (userId: string): Promise<IPost[]> => {
   const likedPosts = await likeRepository.findByUserId(userId);
-  const posts = likedPosts.map((item: any) => item.post);
+
+  // Debug logging - remove this after testing
+  console.log("Raw liked posts:", JSON.stringify(likedPosts, null, 2));
+
+  const posts = likedPosts.map((item: any) => {
+    console.log("Individual post:", JSON.stringify(item.post, null, 2));
+    return item.post;
+  });
   return posts;
 };
 

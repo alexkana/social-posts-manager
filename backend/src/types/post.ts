@@ -7,7 +7,7 @@ import { IUser } from "./user";
 // Post Interface - matching original schema exactly
 export interface IPost extends Document {
   _id: string;
-  user: IUser | string;
+  user: Partial<IUser> | string;
   title: string;
   content: string;
   isPublic: boolean;

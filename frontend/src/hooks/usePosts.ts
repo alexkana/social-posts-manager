@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Post } from '../types/post';
 import * as postService from '../services/postService';
 import { AxiosError } from 'axios';
@@ -15,8 +15,6 @@ export function usePosts(options: UsePostsOptions = {}) {
     fetchFunction,
     includeUserPosts = false
   } = options;
-
-  const queryClient = useQueryClient();
 
   const fetchPosts = async (): Promise<Post[]> => {
     try {

@@ -13,16 +13,36 @@ class LikeRepository implements ILikeRepository {
   async findByUserId(userId: string): Promise<ILikedPost[]> {
     return this.likedPostModel
       .find({ user: userId })
-      .populate("post")
+      .populate({
+        path: "post",
+        populate: {
+          path: "user",
+          select: ["name", "email"],
+        },
+      })
+      .populate("user", "name email")
       .sort({ createdAt: -1 });
   }
 
   async findByPostId(postId: string): Promise<ILikedPost[]> {
-    return this.likedPostModel.find({ post: postId });
+    return this.likedPostModel
+      .find({ post: postId })
+      .populate("user", "name email")
+      .sort({ createdAt: -1 });
   }
 
   async create(likeData: Partial<ILikedPost>): Promise<ILikedPost> {
-    return this.likedPostModel.create(likeData);
+    const like = await this.likedPostModel.create(likeData);
+    return this.likedPostModel
+      .findById(like._id)
+      .populate("user", "name email")
+      .populate({
+        path: "post",
+        populate: {
+          path: "user",
+          select: ["name", "email"],
+        },
+      }) as Promise<ILikedPost>;
   }
 
   async delete(id: string): Promise<void> {

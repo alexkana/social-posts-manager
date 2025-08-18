@@ -3,8 +3,7 @@ import PostCard from './PostCard';
 import { usePosts } from '../../hooks/usePosts';
 import { PostsListProps } from '../../types/component-props';
 import PostsPagination from '../common/PostsPagination';
-
-const ITEMS_PER_PAGE = 6; // Number of posts per page
+import { ITEMS_PER_PAGE } from '../../constants/pagination';
 
 const PostsList: React.FC<PostsListProps> = ({ 
   title = 'Posts',

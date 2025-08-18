@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Mail, Lock } from 'lucide-react'
+import { Mail, Lock, LogIn } from 'lucide-react'
 import { loginSchema, LoginFormData } from '@/types/auth-forms'
 import { authService } from '@/services/authService'
 import { useNavigate } from 'react-router-dom'
@@ -45,9 +45,12 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md bg-card">
+    <Card className="w-full max-w-md bg-card shadow-lg">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <LogIn className="h-5 w-5" />
+          Login
+        </CardTitle>
         <CardDescription>Enter your credentials to access your account</CardDescription>
       </CardHeader>
       <CardContent>
@@ -88,7 +91,7 @@ export function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
               {isLoading ? 'Logging in...' : 'Login'}
             </Button>
           </form>

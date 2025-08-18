@@ -30,15 +30,6 @@ export default class UserRepository implements IUserRepository {
     await this.userModel.findByIdAndDelete(id);
   }
 
-  async validateCredentials(
-    email: string,
-    password: string,
-  ): Promise<IUser | null> {
-    const user = await this.userModel.findOne({ email });
-    // Add password validation logic here
-    return user;
-  }
-
   async findByName(name: string): Promise<IUser[]> {
     return this.userModel.find({ name: new RegExp(name, "i") });
   }

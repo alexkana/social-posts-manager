@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PostCard from './PostCard';
 import PostsPagination from '../common/PostsPagination';
 import { useLikes } from '../../hooks/useLikes';
 import { useAuth } from '../../contexts/AuthContext';
-
-const ITEMS_PER_PAGE = 6; // Number of posts per page
+import { ITEMS_PER_PAGE } from '../../constants/pagination';
+import { RefreshCw, Trash2 } from 'lucide-react';
 
 const LikedPosts: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,14 +58,16 @@ const LikedPosts: React.FC = () => {
             <>
               <button
                 onClick={() => fetchLikedPosts()}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                className="px-4 py-2 bg-blue-500 cursor-pointer font-bold text-white rounded hover:bg-blue-600 transition flex items-center gap-2"
               >
+                <RefreshCw size={16} />
                 Refresh
               </button>
               <button
                 onClick={handleClearAll}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                className="px-4 py-2 bg-red-500 cursor-pointer font-bold text-white rounded hover:bg-red-600 transition flex items-center gap-2"
               >
+                <Trash2 size={16} />
                 Clear All
               </button>
             </>

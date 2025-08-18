@@ -37,19 +37,28 @@ export function useLikes() {
         return { postId, action: 'like' };
       }
     },
-    onSuccess: (result) => {
+    onMutate: async ({ isCurrentlyLiked, postId }) => {
       // For unlike: we can optimistically update liked posts
-      if (result.action === 'unlike') {
-        queryClient.setQueryData(['likedPosts'], (oldData: Post[] = []) => 
-          oldData.filter(post => post._id !== result.postId)
-        );
-      } else {
-        // For like: refresh liked posts to get the updated list
-        queryClient.invalidateQueries({ 
-          queryKey: ['likedPosts'],
-          exact: true 
-        });
-      }
+      await queryClient.cancelQueries({ queryKey: ['likedPosts'] });
+      const previousData = queryClient.getQueryData(['likedPosts']);
+
+      queryClient.setQueryData(['likedPosts'], (oldData: Post[] = []) => {
+        if (isCurrentlyLiked) {
+          return oldData.filter(post => post._id !== postId);
+        } else {
+          return [...oldData, { _id: postId }];
+        }
+      });
+
+      return { previousData };
+    },
+    onError: (error, variables, context) => {
+      queryClient.setQueryData(['likedPosts'], context?.previousData);
+      console.error('Error toggling like:', error);
+      throw error;
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['likedPosts'] });
     }
   });
 

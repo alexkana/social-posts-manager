@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { User, Mail, Lock, KeyRound } from 'lucide-react'
+import { User, Mail, Lock, KeyRound, UserPlus } from 'lucide-react'
 import { authService } from '@/services/authService'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -50,7 +50,10 @@ export function RegisterForm() {
   return (
     <Card className="w-full max-w-md bg-card">
       <CardHeader>
-        <CardTitle>Create an Account</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <UserPlus className="h-5 w-5" />
+          Create an Account
+        </CardTitle>
         <CardDescription>Enter your details to create a new account</CardDescription>
       </CardHeader>
       <CardContent>
@@ -125,7 +128,7 @@ export function RegisterForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full cursor-pointer">
               Register
             </Button>
           </form>

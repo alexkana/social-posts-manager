@@ -1,41 +1,52 @@
+// eslint.config.js
 import js from "@eslint/js";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
-import importPlugin from "eslint-plugin-import";
-import nodePlugin from "eslint-plugin-node";
-import prettierPlugin from "eslint-plugin-prettier";
-import securityPlugin from "eslint-plugin-security";
-import prettierConfig from "eslint-config-prettier";
+import tseslint from "typescript-eslint";
+import globals from "globals";
 
-export default [
-  // Base JavaScript configuration
-  js.configs.recommended,
+// Node 22 has import.meta.dirname, so no __dirname shim needed.
+// If you prefer __dirname, add the fileURLToPath/dirname shim.
 
-  // Configuration for TypeScript files (excluding tests)
+export default tseslint.config(
+  // Top-level ignores (was ignorePatterns)
   {
-    files: ["src/**/*.ts", "src/**/*.tsx"],
-    ignores: ["src/tests/**/*", "tests/**/*"],
+    ignores: [
+      "node_modules/",
+      "dist/",
+      "build/",
+      "coverage/",
+      "*.config.js",
+      "eslint.config.ts",
+      "jest.config.ts",
+      "vite.config.ts",
+    ],
+  },
+
+  // Main config
+  {
+    files: ["**/*.{js,ts}"],
     languageOptions: {
-      parser: tsParser,
+      ecmaVersion: 2020,
+      sourceType: "module",
+      parser: tseslint.parser,
       parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
         project: "./tsconfig.json",
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // Use the `globals` package instead of @eslint/js.environments
+      globals: {
+        ...globals.node,
+        ...globals.es2020,
       },
     },
     plugins: {
-      "@typescript-eslint": tsPlugin,
-      import: importPlugin,
-      node: nodePlugin,
-      prettier: prettierPlugin,
-      security: securityPlugin,
+      "@typescript-eslint": tseslint.plugin,
     },
     rules: {
-      ...tsPlugin.configs.recommended.rules,
-      ...prettierConfig.rules,
-      "prettier/prettier": "error",
+      // equivalent to "extends: ['eslint:recommended']"
+      ...js.configs.recommended.rules,
+
       "no-console": "warn",
-      "no-unused-vars": "off", // Turn off base rule
+      "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -46,56 +57,10 @@ export default [
         },
       ],
       "@typescript-eslint/no-explicit-any": "warn",
-      "import/order": [
-        "error",
-        {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-          ],
-          "newlines-between": "always",
-        },
-      ],
-      "security/detect-non-literal-regexp": "warn",
     },
   },
 
-  // Configuration for JavaScript files
-  {
-    files: ["**/*.js", "**/*.mjs"],
-    languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-      globals: {
-        console: "readonly",
-        process: "readonly",
-        Buffer: "readonly",
-        __dirname: "readonly",
-        __filename: "readonly",
-        global: "readonly",
-        module: "readonly",
-        require: "readonly",
-        exports: "readonly",
-      },
-    },
-    plugins: {
-      import: importPlugin,
-      node: nodePlugin,
-      prettier: prettierPlugin,
-      security: securityPlugin,
-    },
-    rules: {
-      ...prettierConfig.rules,
-      "prettier/prettier": "error",
-      "no-console": "warn",
-    },
-  },
-
-  // Configuration for test files (without TypeScript project parsing)
+  // Tests override (flat-config version of overrides)
   {
     files: [
       "**/*.test.ts",
@@ -103,70 +68,19 @@ export default [
       "**/*.spec.ts",
       "**/*.spec.js",
       "src/tests/**/*",
-      "tests/**/*",
     ],
     languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        // Don't use project for test files
-      },
+      ecmaVersion: 2020,
+      sourceType: "module",
       globals: {
-        describe: "readonly",
-        it: "readonly",
-        test: "readonly",
-        expect: "readonly",
-        beforeEach: "readonly",
-        afterEach: "readonly",
-        beforeAll: "readonly",
-        afterAll: "readonly",
-        jest: "readonly",
-        console: "readonly",
-        process: "readonly",
-        Buffer: "readonly",
-        __dirname: "readonly",
-        __filename: "readonly",
-        global: "readonly",
-        module: "readonly",
-        require: "readonly",
-        exports: "readonly",
+        ...globals.node,
+        ...globals.es2020,
+        jest: true,
       },
-    },
-    plugins: {
-      "@typescript-eslint": tsPlugin,
-      prettier: prettierPlugin,
     },
     rules: {
-      ...tsPlugin.configs.recommended.rules,
-      ...prettierConfig.rules,
-      "prettier/prettier": "error",
       "no-console": "off",
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "error",
-        {
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
-          ignoreRestSiblings: true,
-        },
-      ],
       "@typescript-eslint/no-explicit-any": "warn",
     },
   },
-
-  // Ignore patterns
-  {
-    ignores: [
-      "node_modules/**",
-      "dist/**",
-      "build/**",
-      "coverage/**",
-      "*.config.js",
-      "*.config.ts",
-    ],
-  },
-
-  // Apply Prettier config to disable conflicting rules
-  prettierConfig,
-];
+);

@@ -15,7 +15,9 @@ export default class PostRepository implements IPostRepository {
   }
 
   async findByUserId(userId: string): Promise<IPost[]> {
-    return this.postModel.find({ user: userId });
+    return this.postModel
+      .find({ user: userId })
+      .populate("user", ["name", "email"]);
   }
 
   async findAll(): Promise<IPost[]> {
@@ -26,11 +28,16 @@ export default class PostRepository implements IPostRepository {
   }
 
   async create(postData: Partial<IPost>): Promise<IPost> {
-    return this.postModel.create(postData);
+    const post = await this.postModel.create(postData);
+    return this.postModel
+      .findById(post._id)
+      .populate("user", ["name", "email"]) as Promise<IPost>;
   }
 
   async update(id: string, postData: Partial<IPost>): Promise<IPost | null> {
-    return this.postModel.findByIdAndUpdate(id, postData, { new: true });
+    return this.postModel
+      .findByIdAndUpdate(id, postData, { new: true })
+      .populate("user", ["name", "email"]);
   }
 
   async delete(id: string): Promise<void> {
@@ -42,15 +49,19 @@ export default class PostRepository implements IPostRepository {
   }
 
   async findByTags(tags: string[]): Promise<IPost[]> {
-    return this.postModel.find({ tags: { $in: tags } });
+    return this.postModel
+      .find({ tags: { $in: tags } })
+      .populate("user", ["name", "email"]);
   }
 
   async search(query: string): Promise<IPost[]> {
-    return this.postModel.find({
-      $or: [
-        { title: { $regex: query, $options: "i" } },
-        { content: { $regex: query, $options: "i" } },
-      ],
-    });
+    return this.postModel
+      .find({
+        $or: [
+          { title: { $regex: query, $options: "i" } },
+          { content: { $regex: query, $options: "i" } },
+        ],
+      })
+      .populate("user", ["name", "email"]);
   }
 }

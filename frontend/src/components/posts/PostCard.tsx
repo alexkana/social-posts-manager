@@ -4,6 +4,7 @@ import { Post } from '../../types/post';
 import { useAuth } from '../../contexts/AuthContext';
 import { Heart } from 'lucide-react';
 import { useLikes } from '../../hooks/useLikes';
+import { formatDate } from '../../lib/utils';
 
 interface PostCardProps {
   post: Post;
@@ -29,15 +30,6 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     }
   };
   
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  };
-  
   return (
     <Card className="mb-4 hover:shadow-md transition-shadow duration-300">
       <CardHeader className="pb-2">
@@ -55,10 +47,10 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
        
           <div 
             onClick={handleLikeToggle}
-            className="gap-2"
+            className="gap-2 "
           >
             <Heart 
-              className={`h-4 w-4 text-black cursor:pointer ${isLiked ? 'fill-current' : ''}`} 
+              className={`h-4 w-4 text-black cursor-pointer ${isLiked ? 'fill-current' : ''}`} 
             />
           </div>
        

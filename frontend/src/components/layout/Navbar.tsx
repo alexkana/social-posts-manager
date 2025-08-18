@@ -41,7 +41,7 @@ export default function Navbar() {
           <div className="flex">
             <Link to="/" className="flex-shrink-0 flex items-center">
               <Home className="h-6 w-6 text-blue-600 mr-2" />
-              <span className="text-xl font-bold text-blue-600">Social Posts</span>
+              <span className="text-lg md:text-xl font-bold text-blue-600">Social Posts</span>
             </Link>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {navLinks.map((link) => (
@@ -49,7 +49,7 @@ export default function Navbar() {
                   <Link
                     key={link.to}
                     to={link.to}
-                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-xs md:text-sm font-medium ${
                       location.pathname === link.to
                         ? 'border-blue-500 text-gray-900'
                         : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
@@ -67,13 +67,13 @@ export default function Navbar() {
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700 flex items-center">
+                <span className="hidden md:flex text-xs md:text-sm text-gray items-center">
                   <User className="h-4 w-4 mr-1" />
                   Hello, {user?.name}
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:text-red-800 flex items-center"
+                  className="px-3 py-2 cursor-pointer rounded-md text-xs md:text-sm font-medium text-red-600 hover:text-red-800 flex items-center"
                 >
                   <LogOut className="h-4 w-4 mr-1" />
                   Logout
@@ -83,7 +83,7 @@ export default function Navbar() {
               <div className="flex items-center space-x-4">
                 <Link
                   to="/login"
-                  className={`px-3 py-2 rounded-md text-sm font-medium flex items-center ${
+                  className={`px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center ${
                     location.pathname === '/login'
                       ? 'bg-blue-100 text-blue-700'
                       : 'text-gray-700 hover:bg-gray-100'
@@ -94,7 +94,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   to="/register"
-                  className={`px-3 py-2 rounded-md text-sm font-medium flex items-center ${
+                  className={`px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center ${
                     location.pathname === '/register'
                       ? 'bg-blue-100 text-blue-700'
                       : 'text-gray-700 hover:bg-gray-100'
@@ -133,7 +133,7 @@ export default function Navbar() {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium flex items-center ${
+                  className={`block pl-3 pr-4 py-2 border-l-4 text-sm md:text-base font-medium flex items-center ${
                     location.pathname === link.to
                       ? 'bg-blue-50 border-blue-500 text-blue-700'
                       : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -149,7 +149,7 @@ export default function Navbar() {
           <div className="pt-4 pb-3 border-t border-gray-200">
             {isAuthenticated ? ( 
               <div className="space-y-1">
-                <div className="block px-4 py-2 text-base font-medium text-gray-500 flex items-center">
+                <div className="block px-4 py-2 text-sm md:text-base font-medium text-gray-500 flex items-center">
                   <User className="h-5 w-5 mr-2" />
                   Hello, {user?.name}
                 </div>
@@ -158,7 +158,7 @@ export default function Navbar() {
                     handleLogout();
                     setIsMenuOpen(false);
                   }}
-                  className="block w-full text-left px-4 py-2 text-base font-medium text-red-600 hover:text-red-800 flex items-center"
+                  className="block w-full text-left px-4 py-2 text-sm md:text-base font-medium text-red-600 hover:text-red-800 flex items-center"
                 >
                   <LogOut className="h-5 w-5 mr-2" />
                   Logout
@@ -168,7 +168,7 @@ export default function Navbar() {
               <div className="space-y-1">
                 <Link
                   to="/login"
-                  className={`block px-4 py-2 text-base font-medium flex items-center ${
+                  className={`block px-4 py-2 text-sm md:text-base font-medium flex items-center ${
                     location.pathname === '/login'
                       ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
@@ -180,7 +180,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   to="/register"
-                  className={`block px-4 py-2 text-base font-medium flex items-center ${
+                  className={`block px-4 py-2 text-sm md:text-base font-medium flex items-center ${
                     location.pathname === '/register'
                       ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
