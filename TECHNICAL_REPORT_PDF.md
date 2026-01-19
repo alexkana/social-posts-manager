@@ -1,17 +1,19 @@
 # Social Posts Manager - Technical Report
 
+<div style="page-break-after: always;"></div>
+
 ## Executive Summary
 
 The Social Posts Manager is a comprehensive full-stack web application designed for social media content management. Built using modern technologies and following industry best practices, the application provides a robust platform for creating, managing, and interacting with social media posts.
 
-**Key Metrics:**
+### Key Metrics
 - **Development Time**: Professional-grade architecture
 - **Technology Stack**: React 19, Node.js, TypeScript, MongoDB
 - **Features**: 15+ core features implemented
 - **Code Quality**: TypeScript, ESLint, Prettier, Jest testing
 - **Security**: JWT authentication with HTTP-only cookies, rate limiting
 
----
+<div style="page-break-after: always;"></div>
 
 ## Table of Contents
 
@@ -28,7 +30,7 @@ The Social Posts Manager is a comprehensive full-stack web application designed 
 11. [Technical Decisions & Trade-offs](#technical-decisions--trade-offs)
 12. [Future Enhancements](#future-enhancements)
 
----
+<div style="page-break-after: always;"></div>
 
 ## Project Overview
 
@@ -49,7 +51,7 @@ The Social Posts Manager addresses the need for a centralized platform to manage
 - Marketing professionals
 - Small businesses managing social presence
 
----
+<div style="page-break-after: always;"></div>
 
 ## Architecture & Technology Stack
 
@@ -105,7 +107,7 @@ The application follows a **three-tier architecture**:
 | **Nodemon** | Development server auto-restart |
 | **Concurrently** | Run multiple scripts simultaneously |
 
----
+<div style="page-break-after: always;"></div>
 
 ## Database Design
 
@@ -166,37 +168,34 @@ interface ILikedPost {
 
 ### Database Relationships
 
-```mermaid
-erDiagram
-    User ||--o{ Post : creates
-    User ||--o{ LikedPost : likes
-    Post ||--o{ LikedPost : "is liked by"
-    
-    User {
-        ObjectId _id PK
-        string name
-        string email UK
-        string password
-        Date createdAt
-        Date updatedAt
-    }
-    
-    Post {
-        ObjectId _id PK
-        ObjectId user FK
-        string title
-        string content
-        boolean isPublic
-        Date createdAt
-        Date updatedAt
-    }
-    
-    LikedPost {
-        ObjectId _id PK
-        ObjectId user FK
-        ObjectId post FK
-        Date createdAt
-    }
+```
+User (1) ──────── (many) Post
+ │                         │
+ │                         │
+ └─────── (many) LikedPost (many) ─────┘
+
+User:
+- _id (Primary Key)
+- name
+- email (Unique)
+- password
+- createdAt
+- updatedAt
+
+Post:
+- _id (Primary Key)
+- user (Foreign Key)
+- title
+- content
+- isPublic
+- createdAt
+- updatedAt
+
+LikedPost:
+- _id (Primary Key)
+- user (Foreign Key)
+- post (Foreign Key)
+- createdAt
 ```
 
 ### Indexing Strategy
@@ -207,7 +206,7 @@ erDiagram
    - `(likedposts.user, likedposts.post)` to prevent duplicate likes
 3. **Query Optimization**: Indexes support common query patterns
 
----
+<div style="page-break-after: always;"></div>
 
 ## Backend Implementation
 
@@ -317,7 +316,7 @@ DELETE /api/likes            # Clear all liked posts (protected)
    - Credential support
    - Method restrictions
 
----
+<div style="page-break-after: always;"></div>
 
 ## Frontend Implementation
 
@@ -394,6 +393,8 @@ const useAuth = () => {
 - **Responsive design** for mobile compatibility
 
 #### Key Features
+- **Dark/Light theme support**
+- **Animated backgrounds** with floating geometric shapes
 - **Responsive navigation**
 - **Loading states** and error handling
 - **Optimistic UI updates**
@@ -415,32 +416,22 @@ const useAuth = () => {
    - Dynamic imports for large components
    - Bundle optimization
 
----
+<div style="page-break-after: always;"></div>
 
 ## Authentication & Security
 
 ### Authentication Flow
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant Backend
-    participant Database
-
-    User->>Frontend: Login (email, password)
-    Frontend->>Backend: POST /api/auth/login
-    Backend->>Database: Verify credentials
-    Database-->>Backend: User data
-    Backend->>Backend: Generate JWT
-    Backend-->>Frontend: Set HTTP-only cookie
-    Frontend-->>User: Redirect to dashboard
-    
-    Note over Frontend,Backend: All subsequent requests include cookie
-    
-    Frontend->>Backend: GET /api/posts (with cookie)
-    Backend->>Backend: Verify JWT from cookie
-    Backend-->>Frontend: Return user posts
+```
+User Login Process:
+1. User submits credentials (email, password)
+2. Frontend sends POST /api/auth/login
+3. Backend verifies credentials against database
+4. Backend generates JWT token
+5. Backend sets HTTP-only cookie with token
+6. Frontend redirects to dashboard
+7. All subsequent requests include cookie automatically
+8. Backend verifies JWT from cookie on protected routes
 ```
 
 ### Security Measures
@@ -476,7 +467,7 @@ cors({
 })
 ```
 
----
+<div style="page-break-after: always;"></div>
 
 ## Testing Strategy
 
@@ -544,7 +535,7 @@ describe('Posts API', () => {
 - **Integration tests**: All API endpoints covered
 - **Error handling**: Exception paths tested
 
----
+<div style="page-break-after: always;"></div>
 
 ## Code Quality & Standards
 
@@ -616,7 +607,7 @@ export default [
    - Enum documentation
    - Generic type explanations
 
----
+<div style="page-break-after: always;"></div>
 
 ## Performance Considerations
 
@@ -666,7 +657,7 @@ const queryClient = new QueryClient({
 - **Database queries**: <100ms for indexed queries
 - **Authentication**: <150ms for login/verification
 
----
+<div style="page-break-after: always;"></div>
 
 ## Deployment & DevOps
 
@@ -738,7 +729,7 @@ CMD ["npm", "start"]
 - **Log levels**: Error, warn, info, debug
 - **Request logging**: HTTP request/response tracking
 
----
+<div style="page-break-after: always;"></div>
 
 ## Technical Decisions & Trade-offs
 
@@ -746,6 +737,7 @@ CMD ["npm", "start"]
 
 #### 1. HTTP-Only Cookies vs. localStorage for JWT
 **Decision**: HTTP-only cookies
+
 **Rationale**: 
 - ✅ XSS attack protection
 - ✅ Automatic handling by browser
@@ -755,6 +747,7 @@ CMD ["npm", "start"]
 
 #### 2. React Query vs. Redux for State Management
 **Decision**: React Query + Context API
+
 **Rationale**:
 - ✅ Excellent server state management
 - ✅ Built-in caching and background refetching
@@ -765,6 +758,7 @@ CMD ["npm", "start"]
 
 #### 3. MongoDB vs. PostgreSQL for Database
 **Decision**: MongoDB
+
 **Rationale**:
 - ✅ Flexible schema for evolving requirements
 - ✅ JSON-like document storage
@@ -775,6 +769,7 @@ CMD ["npm", "start"]
 
 #### 4. TypeScript vs. JavaScript
 **Decision**: TypeScript (both frontend and backend)
+
 **Rationale**:
 - ✅ Type safety reduces runtime errors
 - ✅ Better IDE support and autocomplete
@@ -799,7 +794,7 @@ CMD ["npm", "start"]
 **Current**: Optimistic updates for likes, pessimistic for posts
 **Trade-off**: User experience vs. data consistency
 
----
+<div style="page-break-after: always;"></div>
 
 ## Future Enhancements
 
@@ -859,7 +854,7 @@ CMD ["npm", "start"]
 - **Kubernetes deployment**: Container orchestration
 - **Event-driven architecture**: Scalable system design
 
----
+<div style="page-break-after: always;"></div>
 
 ## Conclusion
 
@@ -886,4 +881,24 @@ The application successfully balances feature completeness with code quality, de
 
 ---
 
-*This technical report was generated on 15/08/2025 and reflects the current state of the Social Posts Manager application.*
+### PDF Generation Instructions
+
+To convert this document to PDF, you can use:
+
+1. **Pandoc** (recommended):
+   ```bash
+   pandoc TECHNICAL_REPORT_PDF.md -o technical_report.pdf --pdf-engine=wkhtmltopdf
+   ```
+
+2. **Browser Print to PDF**:
+   - Open the markdown file in a markdown viewer
+   - Use browser's "Print to PDF" function
+
+3. **Markdown to PDF converters**:
+   - Use tools like Typora, Mark Text, or online converters
+   - Ensure page breaks are respected for proper formatting
+
+*This technical report was generated on December 2024 and reflects the current state of the Social Posts Manager application.*
+
+
+

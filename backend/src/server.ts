@@ -2,14 +2,14 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import { connectToDB } from "./config/config";
-import setupSignalHandlers from "./utils/signalHandler";
-import notFound from "./middleware/notFound";
-import { errorHandler } from "./utils/errorHandler";
-import { config } from "./config/variables";
-import authRoutes from "./routes/auth";
-import postRoutes from "./routes/posts";
-import likeRoutes from "./routes/likes";
+import { connectToDB } from "./shared/config/config";
+import setupSignalHandlers from "./shared/utils/signalHandler";
+import notFound from "./shared/middleware/notFound";
+import { errorHandler } from "./shared/utils/errorHandler";
+import { config } from "./shared/config/variables";
+import authRoutes from "./domains/auth/routes/auth";
+import postRoutes from "./domains/posts/routes/posts";
+import likeRoutes from "./domains/likes/routes/likes";
 
 const app = express();
 const PORT: number = parseInt(config.PORT as string) || 3001;
